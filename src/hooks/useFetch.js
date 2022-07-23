@@ -23,12 +23,21 @@ export const useFetch = (url) => {
       setData(json)
       setError(null)
     } catch (err) {
-      setIsPending(false)
-      setError('could not fetch Data')
+      if (err.name === "AbortError") {
+        console.log('the fetch was aborted')
+      } else {
+        setIsPending(false)
+        setError('could not fetch Data')
+      }
+      
     }
   }
 
   fetchData()
+
+  return () => {
+    controller.abort()
+  }
 
  }, [url])
 
